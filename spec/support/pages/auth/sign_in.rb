@@ -1,22 +1,23 @@
 module Pages
-  class SignIn
-    include Capybara::DSL
+  class SignIn < Page
 
-    SIGN_IN_URL = '/users/sign_in'
-    
+    def initialize()
+      super('/users/sign_in')
+    end
+
     def sign_in(username: ENV["QN_USER"], password: ENV["QN_PASSWORD"])
-      visit SIGN_IN_URL
+      visit
       fill_in 'Email', with: username
       fill_in 'Password', with: password
       click_button 'Sign in'
     end
 
     def has_success_message?
-      page.has_content? 'Signed in successfully'
+      has_alert('Signed in successfully')
     end
 
     def has_error_message?
-      page.has_content? 'Invalid email or password'
+      has_warning('Invalid email or password')
     end
   end
 end
