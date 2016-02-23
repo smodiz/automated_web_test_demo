@@ -1,0 +1,6 @@
+test_restclient.rb
+spec/quizzes
+
+.restclient.yml
+spec/support/pages/quizzes
+credentials.yml
