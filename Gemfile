@@ -10,4 +10,5 @@ gem 'activerecord'
 gem 'rest-client'
 gem 'pry'
 gem 'pry-byebug'
+gem 'rubocop', '~> 0.29.1'
 

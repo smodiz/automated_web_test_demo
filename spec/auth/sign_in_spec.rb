@@ -5,7 +5,6 @@ require 'spec_helper'
 #   I want to sign in
 #   So I can use the application
 feature 'User Signs In' do
-
   before(:each) do
     @sign_in_page = Pages::SignIn.new
   end

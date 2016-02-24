@@ -1,10 +1,11 @@
 module Pages
+  #:nodoc:
   class Page
     include Capybara::DSL
 
     attr_reader :url
 
-    def initialize(form_prefix: "", url:)
+    def initialize(form_prefix: '', url:)
       @url = url
       @prefix = form_prefix
     end
@@ -33,13 +34,13 @@ module Pages
       has_error?('Please review the problems below:')
     end
 
-   def has_required_field_message_for?(field_name)
-      within(".#{prefix}_#{field_name.to_s}") do
-        has_css?('.help-block', :text => "can't be blank")
+    def has_required_field_message_for?(field_name)
+      within(".#{prefix}_#{field_name}") do
+        has_css?('.help-block', text: "can't be blank")
       end
     end
 
-    private 
+    private
 
     attr_reader :prefix
 
@@ -58,7 +59,5 @@ module Pages
     def success_css
       'div.alert.alert-success'
     end
-
- 
   end
 end

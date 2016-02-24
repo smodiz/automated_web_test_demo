@@ -22,15 +22,15 @@ RSpec.configure do |config|
   end
 
   config.include Capybara::DSL
-  
-  Dir[File.join(File.dirname(__FILE__),"support/**/*.rb")].each do |f|
+
+  Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each do |f|
     require "#{f}"
   end
 end
 
 Capybara.configure do |config|
   config.run_server = false
-  config.app_host = ENV["QN_APP_HOST"]
+  config.app_host = ENV['QN_APP_HOST']
 
   # use :webkit for a headless driver, and :selenium for an actual browser
   config.default_driver = :selenium
@@ -41,8 +41,8 @@ end
 
 # Set up test database connection
 ActiveRecord::Base.establish_connection(
-      adapter:  'postgresql', 
-      host:     ENV["DB_HOST"],
-      database: ENV["DB_NAME"],
-      username: ENV["DB_USER"],
-      password: ENV["DB_PASSWORD"])
+  adapter:  'postgresql',
+  host:     ENV['DB_HOST'],
+  database: ENV['DB_NAME'],
+  username: ENV['DB_USER'],
+  password: ENV['DB_PASSWORD'])

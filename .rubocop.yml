@@ -1,0 +1,10 @@
+AllCops:
+  Include:
+    - '**/Rakefile'
+  Exclude:
+    - 'test*.rb'
+    - !ruby/regexp /old_and_unused\.rb$/
+
+Style/PredicateName:
+  Enabled: false
+
