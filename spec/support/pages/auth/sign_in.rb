@@ -1,8 +1,8 @@
 module Pages
   class SignIn < Page
 
-    def initialize()
-      super('/users/sign_in')
+    def initialize
+      super(url: '/users/sign_in')
     end
 
     def sign_in(username: ENV["QN_USER"], password: ENV["QN_PASSWORD"])
@@ -13,11 +13,11 @@ module Pages
     end
 
     def has_success_message?
-      has_alert('Signed in successfully')
+      has_alert?('Signed in successfully')
     end
 
     def has_error_message?
-      has_warning('Invalid email or password')
+      has_warning?('Invalid email or password')
     end
   end
 end
