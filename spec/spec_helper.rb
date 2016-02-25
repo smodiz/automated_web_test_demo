@@ -30,7 +30,9 @@ RSpec.configure do |config|
 
   # use DatabaseCleaner to manage test data removal
   config.before(:each) do
-    DatabaseCleaner.strategy = :truncation, {:only => %w[decks tags taggings flash_cards]}
+    DatabaseCleaner.strategy =
+      :truncation,
+      { only: %w(decks tags taggings flash_cards) }
   end
 
   config.before(:each) do
