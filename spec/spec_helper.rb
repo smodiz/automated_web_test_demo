@@ -7,6 +7,7 @@ require 'pg'
 require 'yaml'
 require 'pry'
 require 'pry-byebug'
+require 'database_cleaner'
 
 # Load the credentials
 ENV.update YAML.load(File.read('./credentials.yml'))
@@ -25,6 +26,19 @@ RSpec.configure do |config|
 
   Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each do |f|
     require "#{f}"
+  end
+
+  # use DatabaseCleaner to manage test data removal
+  config.before(:each) do
+    DatabaseCleaner.strategy = :truncation, {:only => %w[decks tags taggings flash_cards]}
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
   end
 end
 
