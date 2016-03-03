@@ -18,7 +18,7 @@ feature 'User creates flash card deck' do
   before(:each) do
     Pages::SignIn.new.sign_in
     decks_index_page = Pages::FlashCardDecks.new
-    decks_index_page.visit
+    decks_index_page.visit_page
     @new_deck_page = decks_index_page.click_create_deck
   end
 
@@ -66,10 +66,14 @@ feature 'User creates flash card deck' do
   scenario 'successfully create a deck using an existing tag' do
     # need a pre-existing tag to re-use. For speed, insert the
     # test data directly into test database
-    create_deck_in_database(
-      name: 'xy',
-      description: 'wx',
-      tag_list: @attributes[:tag_list])
+    TestDataFactory::TestDeck.new.create(
+      {
+        name: 'xy',
+        description: 'wx',
+        tag_list: @attributes[:tag_list]
+      },
+      @user
+    )
 
     # create another deck, with the same tag name
     create_deck_with(@attributes)
@@ -157,10 +161,4 @@ end
 def verify_deck_has(attributes)
   expect(@deck_page).to have_deck_with_attributes(attributes)
   expect(@deck_page).to have_successful_save_message
-end
-
-def create_deck_in_database(attributes)
-  deck = Deck.create(name: 'wx', description: 'yz', user_id: @user.id)
-  tag = Tag.create(name: attributes[:tag_list])
-  Tagging.create(tag_id: tag.id, taggable_id: deck.id, taggable_type: 'Deck')
 end

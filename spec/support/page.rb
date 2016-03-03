@@ -10,8 +10,8 @@ module Pages
       @prefix = form_prefix
     end
 
-    def visit
-      super(url)
+    def visit_page
+      visit(url)
     end
 
     def has_alert?(message)

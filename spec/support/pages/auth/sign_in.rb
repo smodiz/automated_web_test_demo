@@ -6,7 +6,7 @@ module Pages
     end
 
     def sign_in(username: ENV['QN_USER'], password: ENV['QN_PASSWORD'])
-      visit
+      visit_page
       fill_in 'Email', with: username
       fill_in 'Password', with: password
       click_button 'Sign in'
