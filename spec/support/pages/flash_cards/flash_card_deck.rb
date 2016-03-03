@@ -22,6 +22,28 @@ module Pages
       Pages::FlashCardDecks.new
     end
 
+    def click_add_flash_card_link
+      click_link 'Add Flash Card'
+    end
+
+    def add_flash_card(attributes)
+      fill_in 'front', with: attributes[:front]
+      fill_in 'back', with: attributes[:back]
+      find('#flash_card_difficulty').select attributes[:difficulty]
+      click_button 'Save'
+    end
+
+    def has_flashcards?(flash_cards)
+      flash_cards.each do |flash_card|
+        return false unless has_flashcard?(flash_card)
+      end
+      true
+    end
+
+    def has_any_flashcards?
+      !has_css?('td', text: 'No flash cards have been added yet.')
+    end
+
     private
 
     def attribute?(field_title, field_value)
@@ -34,6 +56,14 @@ module Pages
 
     def formatted_tag_list(tag_list)
       tag_list.split(',').map { |s| s.strip.downcase }.sort.join(', ')
+    end
+
+    def has_flashcard?(flash_card)
+      within('table#flash-cards') do
+        has_css?('td', text: flash_card[:front]) &&
+          has_css?('td', text: flash_card[:back]) &&
+          has_css?('td', text: flash_card[:difficulty])
+      end
     end
   end
 end
