@@ -8,6 +8,8 @@ require 'yaml'
 require 'pry'
 require 'pry-byebug'
 require 'database_cleaner'
+require 'rest-client'
+require 'json'
 
 # Load the credentials
 ENV.update YAML.load(File.read('./credentials.yml'))
