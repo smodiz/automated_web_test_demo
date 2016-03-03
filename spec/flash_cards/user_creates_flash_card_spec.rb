@@ -80,7 +80,4 @@ feature 'user creates flash card' do
     @deck_page.add_flash_card(card_1)
     expect(@deck_page).not_to have_any_flashcards
   end
-
-  # Scenario: hide the flash card entry fields
-  #  (shoudl not add, should be empty when viewed again)
 end
