@@ -62,3 +62,7 @@ ActiveRecord::Base.establish_connection(
   database: ENV['DB_NAME'],
   username: ENV['DB_USER'],
   password: ENV['DB_PASSWORD'])
+
+# Create the test user in the database, if not exists
+user = User.where(email: ENV['QN_USER']).first
+Pages::SignUpPage.new.sign_in unless user
