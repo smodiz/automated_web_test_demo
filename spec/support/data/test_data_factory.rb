@@ -2,6 +2,9 @@ module TestDataFactory
   # Handles building and creating Flash Card Decks
   # in the Test database
   class TestDeck
+    # Creating a flash card deck with a tag
+    # involves writing to three tables:
+    # 'decks', 'tags', and the join table 'taggings'
     def create(attributes, user)
       deck = Deck.create(
         name: attributes[:name],
