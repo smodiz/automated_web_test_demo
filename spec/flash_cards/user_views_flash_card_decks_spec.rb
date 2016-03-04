@@ -5,7 +5,7 @@ require 'spec_helper'
 #   I want to view the decks I have authored
 #   So I can view, edit, or delete them
 feature 'user views deck' do
-  before(:each) do
+  before(:all) do
     create_other_user_and_deck
     create_default_user_and_deck
   end
@@ -22,29 +22,24 @@ feature 'user views deck' do
 
     expect(decks_index_page).to have_deck(@deck1.name)
     expect(decks_index_page).to have_deck(@deck2.name)
-
     expect(decks_index_page).not_to have_deck(@other_deck.name)
   end
 
-  after(:each) do
+  after(:all) do
     User.find_by(email: 'other@example.com').destroy
   end
 end
 
 # helper methods
 
-def default_user
-  Pages::SignIn.new.sign_in
-  User.find_by(email: ENV['QN_USER'])
-end
-
 def create_other_user_and_deck
+  # create other user via Sign up page
   name = 'other@example.com'
   passwd = 'other123'
   dashboard_page = Pages::SignUp.new.sign_up(username: name, password: passwd)
   dashboard_page.menu.sign_out
 
-  # create data directly in database for speed
+  # create deck for other user directly in database for speed
   @other_user = User.find_by(email: name)
   @other_deck = TestDataFactory::TestDeck.create_deck_for(
     user: @other_user,
@@ -59,4 +54,9 @@ def create_default_user_and_deck
   @deck2 = TestDataFactory::TestDeck.create_deck_for(
     user: @user,
     deck_number: 2)
+end
+
+def default_user
+  Pages::SignIn.new.sign_in
+  User.find_by(email: ENV['QN_USER'])
 end
