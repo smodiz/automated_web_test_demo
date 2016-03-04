@@ -3,11 +3,12 @@ module Pages
   class Page
     include Capybara::DSL
 
-    attr_reader :url
+    attr_reader :url, :menu
 
     def initialize(form_prefix: '', url:)
       @url = url
       @prefix = form_prefix
+      @menu = Components::Menu.new(self)
     end
 
     def visit_page
@@ -38,6 +39,14 @@ module Pages
       within(".#{prefix}_#{field_name}") do
         has_css?('.help-block', text: "can't be blank")
       end
+    end
+
+    def signed_in?
+      menu.signed_in?
+    end
+
+    def sign_out
+      menu.sign_out
     end
 
     private
