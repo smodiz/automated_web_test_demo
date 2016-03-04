@@ -15,6 +15,7 @@ module TestDataFactory
         tag_id: tag.id,
         taggable_id: deck.id,
         taggable_type: 'Deck')
+      deck
     end
 
     def self.create_deck_for(user:, deck_number:)
