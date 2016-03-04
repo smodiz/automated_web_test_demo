@@ -1,11 +1,11 @@
 module Pages
   #:nodoc:
-  class SignUpPage < Page
+  class SignUp < Page
     def initialize
       super(url: '/users/sign_up')
     end
 
-    def sign_in(username: ENV['QN_USER'], password: ENV['QN_PASSWORD'])
+    def sign_up(username: ENV['QN_USER'], password: ENV['QN_PASSWORD'])
       visit_page
       fill_in 'Email', with: username
       fill_in 'Password', with: password

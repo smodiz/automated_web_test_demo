@@ -67,4 +67,4 @@ ActiveRecord::Base.establish_connection(
 
 # Create the test user in the database, if not exists
 user = User.where(email: ENV['QN_USER']).first
-Pages::SignUpPage.new.sign_in unless user
+Pages::SignUpPage.new.sign_up unless user
