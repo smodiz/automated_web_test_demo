@@ -23,6 +23,10 @@ module Pages
       has_content? 'There are no flash card decks yet.'
     end
 
+    def has_deck?(deck_name)
+      has_link? deck_name
+    end
+
     def click_deck_link(deck_name)
       click_link deck_name
       Pages::FlashCardDeck.new
