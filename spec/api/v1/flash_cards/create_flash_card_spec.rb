@@ -4,7 +4,7 @@ describe 'create flash card' do
   before(:each) do
     @user = User.find_by(email: ENV['QN_USER'])
     @auth_token = @user.authentication_token
-    @deck = TestDataFactory::TestDeck.new.create(
+    @deck = TestDataFactory::TestDeck.create(
       { name: 'Lola the Schnauzer', description: 'All about Lola' },
       @user)
     @flash_card_api_url = UrlBuilder.url_for('api/v1/flash_cards')

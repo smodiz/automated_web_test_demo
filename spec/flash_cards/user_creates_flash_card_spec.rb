@@ -16,7 +16,7 @@ feature 'user creates flash card' do
       tag_list: 'dogs',
       description: 'Learn about Lola'
     }
-    TestDataFactory::TestDeck.new.create(
+    TestDataFactory::TestDeck.create(
       @deck_attributes,
       @user
     )

@@ -19,8 +19,8 @@ module Pages
       end
     end
 
-    def has_deck?
-      !(has_content? 'There are no flash card decks yet.')
+    def has_no_decks?
+      has_content? 'There are no flash card decks yet.'
     end
 
     def click_deck_link(deck_name)

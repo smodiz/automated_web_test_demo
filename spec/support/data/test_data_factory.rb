@@ -5,7 +5,7 @@ module TestDataFactory
     # Creating a flash card deck with a tag
     # involves writing to three tables:
     # 'decks', 'tags', and the join table 'taggings'
-    def create(attributes, user)
+    def self.create(attributes, user)
       deck = Deck.create(
         name: attributes[:name],
         description: attributes[:description],
@@ -15,6 +15,16 @@ module TestDataFactory
         tag_id: tag.id,
         taggable_id: deck.id,
         taggable_type: 'Deck')
+    end
+
+    def self.create_deck_for(user:, deck_number:)
+      TestDataFactory::TestDeck.create(
+        {
+          name: "Deck number #{deck_number}",
+          tag_list: 'decks',
+          description: 'Test deck'
+        },
+        user)
     end
   end
 end

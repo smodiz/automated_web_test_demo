@@ -66,7 +66,7 @@ feature 'User creates flash card deck' do
   scenario 'successfully create a deck using an existing tag' do
     # need a pre-existing tag to re-use. For speed, insert the
     # test data directly into test database
-    TestDataFactory::TestDeck.new.create(
+    TestDataFactory::TestDeck.create(
       {
         name: 'xy',
         description: 'wx',
@@ -150,7 +150,7 @@ feature 'User creates flash card deck' do
   # And I am returned to the Decks index page
   scenario 'cancel creating a new flash card deck' do
     decks_index_page = @new_deck_page.click_cancel
-    expect(decks_index_page).not_to have_deck
+    expect(decks_index_page).to have_no_decks
   end
 end
 
