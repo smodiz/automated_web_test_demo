@@ -1,5 +1,6 @@
 module Components
-  #:nodoc:
+  # The menu page component encapsulates the top level
+  # menu portion of a page within the application
   class Menu < Component
     attr_reader :page
 
