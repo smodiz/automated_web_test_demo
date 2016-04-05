@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'create flash card' do
+describe 'create flash card via the API' do
   before(:each) do
     @user = User.find_by(email: ENV['QN_USER'])
     @auth_token = @user.authentication_token
