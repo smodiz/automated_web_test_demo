@@ -1,11 +1,13 @@
 
 # Automated Web Test Demo
 
-This is a demo of automated web testing, just for fun. It's a small sample of testing just a slice of the functionality of Quiznerd.
+This is a demo of automated web testing, just for fun. It demonstrates testing just a slice of the functionality of a web application called Quiznerd, both via the browser interface as well as via the API. 
 
-I wrote Quiznerd using Ruby on Rails a while back. It's a web application that allows a user to create and use study aids like quizzes, flash cards, etc. As part of development, I used the typical set of testing tools you see being used for Rails apps (RSpec, Capybara, Factory Girl, etc) to do unit tests as well as functional tests. I love working with these testing tools, so I wondered .... could I use the same tools to perform the functional tests if it wasn't a Ruby on Rails application? The answer is yes with very few modifications, and here's the demo I wrote.
+I wrote Quiznerd using Ruby on Rails a while back. It's a web application that allows a user to create and use study aids like quizzes, flash cards, etc. You can see it on Heroku [here](https://quiznerd.herokuapp.com). 
 
-It does not assume anything about the implementation of the web application under test (i.e. it could be J2EE, Ruby on Rails, .NET, etc). In this case, the web application is Quiznerd which happens to be a Ruby on Rails app, but these techniques would work equally well on anything else. The only assumption is that it is a web application, and that you have access to the test database. Oh, and this particular web app also has an API, so I demonstrated testing that, too.
+As part of development, I used the typical set of testing tools you see being used for Rails apps (RSpec, Capybara, Factory Girl, etc) to do unit tests as well as functional tests. I love working with these testing tools, so I wondered .... could I use the same tools to perform the functional tests if it wasn't a Ruby on Rails application? The answer is yes, with very few modifications, and this is the demonstration of that. 
+
+It does not assume anything about the implementation of the web application under test (i.e. it could be J2EE, Ruby on Rails, .NET, etc). In this case, the web application happens to be a Ruby on Rails app, but these techniques would work equally well on anything else. The only assumption is that it is a web application, and that you have access to the test database. Oh, and this particular web app also has an API, so I demonstrated testing that, too.
 
 Notes:
 
