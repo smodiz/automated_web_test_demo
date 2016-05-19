@@ -4,3 +4,4 @@ spec/quizzes
 .restclient.yml
 spec/support/pages/quizzes
 credentials.yml
+test_results.html
