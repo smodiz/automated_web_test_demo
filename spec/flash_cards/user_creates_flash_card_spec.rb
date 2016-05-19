@@ -61,6 +61,7 @@ feature 'user creates flash card' do
     }
     @deck_page.click_add_flash_card_link
     @deck_page.add_flash_card(card_1)
+    expect(@deck_page).to have_flashcards([card_1])
     @deck_page.add_flash_card(card_2)
     expect(@deck_page).to have_flashcards([card_1, card_2])
   end
