@@ -10,6 +10,8 @@ require 'pry-byebug'
 require 'database_cleaner'
 require 'rest-client'
 require 'json'
+require 'factory_girl'
+require 'faker'
 
 # Load the credentials
 ENV.update YAML.load(File.read('./credentials.yml'))
@@ -44,17 +46,29 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
+
+  # Configure Factory Girl
+  config.include FactoryGirl::Syntax::Methods
+  config.before(:suite) do
+    FactoryGirl.find_definitions
+  end
 end
 
 Capybara.configure do |config|
   config.run_server = false
   config.app_host = ENV['QN_APP_HOST']
 
-  # use :webkit for a headless driver, and :selenium for an actual browser
+  # use :webkit for a headless driver, or :selenium for an actual browser
+  # config.default_driver = :webkit
   config.default_driver = :selenium
 
   # By default, the javascript driver is selenium, but can be changed like this:
-  # Capybara.javascript_driver = :webkit
+  Capybara.javascript_driver = :webkit
+end
+
+Capybara::Webkit.configure do |config|
+  config.allow_url('http://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js')
+  config.allow_url('oss.maxcdn.com')
 end
 
 # Set up test database connection
@@ -68,3 +82,4 @@ ActiveRecord::Base.establish_connection(
 # Create the test user in the database, if not exists
 user = User.where(email: ENV['QN_USER']).first
 Pages::SignUp.new.sign_up unless user
+
