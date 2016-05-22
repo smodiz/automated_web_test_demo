@@ -68,5 +68,15 @@ module Pages
     def success_css
       'div.alert.alert-success'
     end
+
+    def select_by_value(id, value)
+      option = select_option_label(id, value)
+      select(option, from: id)
+    end
+
+    def select_option_label(id, value)
+      option_xpath = "//*[@id='#{id}']/option[@value='#{value}']"
+      find(:xpath, option_xpath).text
+    end
   end
 end
