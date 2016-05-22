@@ -1,3 +1,5 @@
+# This is the configuration file for RSpec
+
 require 'capybara'
 require 'capybara/rspec'
 require 'capybara-webkit'
