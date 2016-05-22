@@ -7,7 +7,8 @@
 # located in a separate file to make things neater and easier to find.
 
 # Table: users
-class User < ActiveRecord::Base; end
+class User < ActiveRecord::Base
+end
 
 # Table: decks
 #
@@ -21,7 +22,7 @@ class Deck < ActiveRecord::Base
 end
 
 # Table: flash_cards
-class FlashCards < ActiveRecord::Base
+class FlashCard < ActiveRecord::Base
   belongs_to :deck
 end
 
