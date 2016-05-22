@@ -11,6 +11,7 @@ module Pages
       visit_page
       fill_in 'Email', with: username
       fill_in 'Password', with: password
+      check 'Remember me'
       click_button 'Sign in'
       Pages::Dashboard.new
     end
