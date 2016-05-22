@@ -1,11 +1,12 @@
+
+require_relative 'models'
 # Using Factory Girl to easily create test data. Factory Girl
 # will use the Active Record classes defined the models.rb file
-# to insert data into the right tables. In some cases, we are using
+# to insert data into the right tables. We can either use
 # the Faker gem to create realistic data that is unique as well as
-# valid, like in the case of a user's email address and password. In
-# other cases, the sequence method is used to add a sequential
-# number to a field to make it unique, like for the front and back
-# of a flash card.
+# valid, like in the case of a user's email address and password, or
+# we can use the sequence method to add a sequential number to a field
+# to make it unique, like for the front and back of a flash card.
 
 # For a larger application, you would split each factory or
 # set of related factories into separate files to make it
@@ -15,22 +16,16 @@
 # values that can be over-ridden as needed when creating
 # test data.
 # For example, this creates the default:
-#  FactoryGirl.create(:user)
+#  FactoryGirl.create(:flash_card)
 #
-# This creates one with a specific email and default values for everything else:
-#  FactoryGirl.create(:user, email: 'something-specific@example.com')
+# This creates one with a specific front and default values for everything else:
+#  FactoryGirl.create(:flash_card, front: 'This is the front')
 #
 FactoryGirl.define do
-  factory :user do
-    email Faker::Internet.email
-    password Faker::Internet.password(8)
-    password_confirmation "#{password}"
-  end
-
   factory :deck, aliases: [:taggable] do
     sequence(:name) { |n| "Flash Deck #{n}" }
     description { "Description for #{name}" }
-    user_id { User.where(email: ENV['QN_USER']) }
+    user_id { User.where(email: ENV['QN_USER']).first.id }
     status 'Private'
   end
 
@@ -38,6 +33,8 @@ FactoryGirl.define do
     sequence(:front) { |n| "Front of flash card #{n}" }
     sequence(:back) { |n| "Back of flash card #{n}" }
     difficulty { %w(1 2 3).sample }
+    sequence(:sequence) { |n| "#{n}" }
+    association :deck, factory: :deck
   end
 
   factory :tag do
