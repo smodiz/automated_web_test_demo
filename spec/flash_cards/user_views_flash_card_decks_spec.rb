@@ -6,8 +6,12 @@ require 'spec_helper'
 #   So I can view, edit, or delete them
 feature 'user views deck' do
   before(:all) do
-    create_other_user_and_deck
-    create_default_user_and_deck
+    create_decks_for_user
+    create_deck_for_another_user
+
+    Pages::SignIn.new.sign_in
+    @decks_index_page = Pages::FlashCardDecks.new
+    @decks_index_page.visit_page
   end
 
   # Scenario: successfully views flash card decks
@@ -16,47 +20,36 @@ feature 'user views deck' do
   # When I navigate to the index page for decks
   # Then I am able to see the decks I have authored
   # And I am not able to see the decks of other users
-  scenario 'successfully' do
-    decks_index_page = Pages::FlashCardDecks.new
-    decks_index_page.visit_page
+  scenario 'successfully views own decks' do
+    expect(@decks_index_page).to have_deck(@decks[0].name)
+    expect(@decks_index_page).to have_deck(@decks[1].name)
+  end
 
-    expect(decks_index_page).to have_deck(@deck1.name)
-    expect(decks_index_page).to have_deck(@deck2.name)
-    expect(decks_index_page).not_to have_deck(@other_deck.name)
+  scenario 'cannot view other user''s deck' do
+    expect(@decks_index_page).not_to have_deck(@other_deck.name)
   end
 
   after(:all) do
-    User.find_by(email: 'other@example.com').destroy
+    @other_user.destroy
   end
-end
 
-# helper methods
+  private
 
-def create_other_user_and_deck
-  # create other user via Sign up page
-  name = 'other@example.com'
-  passwd = 'other123'
-  dashboard_page = Pages::SignUp.new.sign_up(username: name, password: passwd)
-  dashboard_page.menu.sign_out
+  def create_decks_for_user
+    @decks = [FactoryGirl.create(:deck), FactoryGirl.create(:deck)]
+  end
 
-  # create deck for other user directly in database for speed
-  @other_user = User.find_by(email: name)
-  @other_deck = TestDataFactory::TestDeck.create_deck_for(
-    user: @other_user,
-    deck_number: 3)
-end
+  def create_deck_for_another_user
+    @other_user = create_other_user
+    @other_deck = FactoryGirl.create(:deck, user: @other_user)
+  end
 
-def create_default_user_and_deck
-  @user = default_user
-  @deck1 = TestDataFactory::TestDeck.create_deck_for(
-    user: @user,
-    deck_number: 1)
-  @deck2 = TestDataFactory::TestDeck.create_deck_for(
-    user: @user,
-    deck_number: 2)
-end
-
-def default_user
-  Pages::SignIn.new.sign_in
-  User.find_by(email: ENV['QN_USER'])
+  def create_other_user
+    other_user = Faker::Internet.email
+    dashboard_page = Pages::SignUp.new.sign_up(
+      username: other_user,
+      password: Faker::Internet.password(8))
+    dashboard_page.menu.sign_out
+    User.where(email: other_user).first
+  end
 end

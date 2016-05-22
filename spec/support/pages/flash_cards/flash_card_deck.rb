@@ -11,10 +11,10 @@ module Pages
       has_success?('Deck was successfully saved')
     end
 
-    def has_deck_with_attributes?(attributes)
-      attribute?('Name:', attributes[:name]) &&
-        attribute?('Description:', attributes[:description]) &&
-        attribute?('Tags:', formatted_tag_list(attributes[:tag_list]))
+    def has_deck?(deck, tags)
+      attribute?('Name:', deck.name) &&
+        attribute?('Description:', deck.description) &&
+        attribute?('Tags:', FlashCardDeck.formatted_tag_list(tags))
     end
 
     def click_decks_link
@@ -26,10 +26,10 @@ module Pages
       click_link 'Add Flash Card'
     end
 
-    def add_flash_card(attributes)
-      fill_in 'front', with: attributes[:front]
-      fill_in 'back', with: attributes[:back]
-      find('#flash_card_difficulty').select attributes[:difficulty]
+    def add_flash_card(flash_card)
+      fill_in 'front', with: flash_card.front
+      fill_in 'back', with: flash_card.back
+      select_by_value('flash_card_difficulty', flash_card.difficulty)
       click_button 'Save'
     end
 
@@ -44,6 +44,10 @@ module Pages
       !has_css?('td', text: 'No flash cards have been added yet.')
     end
 
+    def self.formatted_tag_list(tags)
+      tags.map { |t| t.name.strip.downcase }.sort.join(', ')
+    end
+
     private
 
     def attribute?(field_title, field_value)
@@ -54,15 +58,10 @@ module Pages
       end
     end
 
-    def formatted_tag_list(tag_list)
-      tag_list.split(',').map { |s| s.strip.downcase }.sort.join(', ')
-    end
-
     def has_flashcard?(flash_card)
       within('table#flash-cards') do
-        has_css?('td', text: flash_card[:front]) &&
-          has_css?('td', text: flash_card[:back]) &&
-          has_css?('td', text: flash_card[:difficulty])
+        has_css?('td', text: flash_card.front) &&
+          has_css?('td', text: flash_card.back)
       end
     end
   end

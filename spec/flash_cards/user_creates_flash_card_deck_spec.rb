@@ -6,14 +6,6 @@ require 'spec_helper'
 #   So that I can add flash cards to it
 #   And be able to study flash cards
 feature 'User creates flash card deck' do
-  before(:all) do
-    @attributes = {
-      name: 'Ruby for Newbies',
-      tag_list: 'ruby',
-      description: 'An overview of basic Ruby'
-    }
-    @user = User.find_by(email: ENV['QN_USER'])
-  end
 
   before(:each) do
     Pages::SignIn.new.sign_in
@@ -28,9 +20,13 @@ feature 'User creates flash card deck' do
   # And enter valid data into the fields
   # And click the Create Deck button
   # Then a new flash card deck is created
-  scenario 'successfully creates deck' do
-    create_deck_with(@attributes)
-    verify_deck_has(@attributes)
+  scenario 'succeeds with valid data' do
+    deck = FactoryGirl.build(:deck)
+    tag = FactoryGirl.build(:tag)
+    @deck_page = @new_deck_page.create(deck, [tag])
+
+    expect(@deck_page).to have_deck(deck, [tag])
+    expect(@deck_page).to have_successful_save_message
   end
 
   # Scenario: fail to create deck without entering required fields
@@ -39,13 +35,9 @@ feature 'User creates flash card deck' do
   # And do not enter required fields
   # Then an error message for each required field is shown
   # And the deck is not created
-  scenario 'does not create deck without required fields' do
-    invalid_attributes = {
-      name: '',
-      tag_list: '',
-      description: ''
-    }
-    @new_deck_page.create(invalid_attributes)
+  scenario 'fails without required fields' do
+    invalid_deck = FactoryGirl.build(:deck, name: '', description: '')
+    @new_deck_page.create(invalid_deck, [])
 
     expect(@new_deck_page).to have_generic_page_error
     # require fields should each have a message
@@ -63,25 +55,19 @@ feature 'User creates flash card deck' do
   # When I create a new flash card deck using a pre-existing tag
   # Then the deck is created successfully
   # And an additional tag is NOT created in the database
-  scenario 'successfully create a deck using an existing tag' do
-    # need a pre-existing tag to re-use. For speed, insert the
-    # test data directly into test database
-    TestDataFactory::TestDeck.create(
-      {
-        name: 'xy',
-        description: 'wx',
-        tag_list: @attributes[:tag_list]
-      },
-      @user
-    )
+  scenario 'succeeds using an existing tag' do
+    # Need to insert a tag into the database to re-use.
+    tagging = FactoryGirl.create(:tagging)
+    deck = FactoryGirl.build(:deck)
 
     # create another deck, with the same tag name
-    create_deck_with(@attributes)
-    verify_deck_has(@attributes)
+    @deck_page = @new_deck_page.create(deck, [tagging.tag])
+    expect(@deck_page).to have_deck(deck, [tagging.tag])
+    expect(@deck_page).to have_successful_save_message
 
-    # also, check the database directly. should have 2 decks, but 1 tag
-    expect(Deck.where(user_id: @user.id).count).to eq 2
-    expect(Tag.where(name: @attributes[:tag_list]).count).to eq 1
+    # check the database directly. should have 2 decks, but 1 tag
+    expect(Deck.where(user_id: deck.user_id).count).to eq 2
+    expect(Tag.where(name: tagging.tag.name).count).to eq 1
   end
 
   # Scenario: successfully create a deck with multiple tags
@@ -89,42 +75,41 @@ feature 'User creates flash card deck' do
   # When I create a flash card deck using multiple tags
   # Then the deck is created successfully
   # And all the tags appear in alphabetical order on the new Deck page
-  scenario 'successfully create a deck with multiple tags' do
-    attributes = {
-      name: 'Design Pattern in Ruby',
-      tag_list: 'ruby, design--patterns',
-      description: 'The GoF Design Patterns using Ruby'
-    }
-    create_deck_with(attributes)
-    verify_deck_has(attributes)
+  scenario 'succeeds using multiple tags' do
+    deck = FactoryGirl.build(:deck)
+    tag = FactoryGirl.build(:tag)
+    tag_2 = FactoryGirl.build(:tag)
+
+    @deck_page = @new_deck_page.create(deck, [tag, tag_2])
+
+    expect(@deck_page).to have_deck(deck, [tag, tag_2])
+    expect(@deck_page).to have_successful_save_message
   end
 
   # Scenario: successfully create a deck with a tag with special characters
   # Given that I have successfully logged in
   # When I create a flash card deck using a tag with special characters
   # Then the deck is created successfully
-  scenario 'create deck with a tag that has special characters' do
-    attributes = {
-      name: 'Some name',
-      tag_list: "~`!@#$%^&*()_-+=\|{}[]'\"?<>.",
-      description: 'Some description'
-    }
-    create_deck_with(attributes)
-    verify_deck_has(attributes)
+  scenario 'succeeds using a tag with special characters' do
+    deck = FactoryGirl.build(:deck)
+    special_tag = FactoryGirl.build(:tag, name: "~`!@#$%^&*()_-+=\|{}[]'\"?<>.")
+    @deck_page = @new_deck_page.create(deck, [special_tag])
+    expect(@deck_page).to have_deck(deck, [special_tag])
+    expect(@deck_page).to have_successful_save_message
   end
 
   # Scenario:  successfully create a deck using a new tag containing spaces
   # Given that I have successfully signed in
   # When I create a new flash card deck using a new tag with spaces
   # Then the deck is created successfully
-  scenario 'create deck with a tag containing spaces' do
-    attributes = {
-      name: 'Some name',
-      tag_list: 'tag with spaces',
-      description: 'Some description'
-    }
-    create_deck_with(attributes)
-    verify_deck_has(attributes)
+  scenario 'succeeds using a tag containing spaces' do
+    deck = FactoryGirl.build(:deck)
+    spaces_tag = FactoryGirl.build(:tag, name: 'tag with spaces')
+
+    @deck_page = @new_deck_page.create(deck, [spaces_tag])
+
+    expect(@deck_page).to have_deck(deck, [spaces_tag])
+    expect(@deck_page).to have_successful_save_message
   end
 
   # Scenario: successfully create a deck using duplicate tag names
@@ -132,15 +117,17 @@ feature 'User creates flash card deck' do
   # When I create a new flash card deck using new tags which have the same name
   # Then the deck is created successfully
   # And the system only creates one tag
-  scenario 'create a deck using duplicate tags names' do
-    attributes = {
-      name: 'Some name',
-      tag_list: 'ruby, ruby, ruby',
-      description: 'Some description'
-    }
-    create_deck_with(attributes)
-    verify_deck_has(attributes)
-    expect(Tag.where(name: @attributes[:tag_list]).count).to eq 1
+  scenario "doesn't create multiple tags when using duplicate tags names" do
+    deck = FactoryGirl.build(:deck)
+    tag = FactoryGirl.build(:tag)
+    duplicate_tag = FactoryGirl.build(:tag, name: tag.name)
+
+    @deck_page = @new_deck_page.create(deck, [tag, duplicate_tag])
+
+    expect(@deck_page).to have_deck(deck, [tag, duplicate_tag])
+    expect(@deck_page).to have_successful_save_message
+    # check the database directly, in addition to the browser
+    expect(Tag.where(name: tag.name).count).to eq 1
   end
 
   # Scenario: cancel creating a new flash card deck
@@ -150,15 +137,9 @@ feature 'User creates flash card deck' do
   # And I am returned to the Decks index page
   scenario 'cancel creating a new flash card deck' do
     decks_index_page = @new_deck_page.click_cancel
+
     expect(decks_index_page).to have_no_decks
+    # check the database directly
+    expect(Deck.count).to eq 0
   end
-end
-
-def create_deck_with(attributes)
-  @deck_page = @new_deck_page.create(attributes)
-end
-
-def verify_deck_has(attributes)
-  expect(@deck_page).to have_deck_with_attributes(attributes)
-  expect(@deck_page).to have_successful_save_message
 end

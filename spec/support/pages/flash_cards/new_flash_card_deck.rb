@@ -8,10 +8,11 @@ module Pages
       super(url: '/decks/new', form_prefix: 'deck')
     end
 
-    def create(attributes)
-      fill_in 'Name', with: attributes[:name]
-      fill_in 'Description', with: attributes[:description]
-      fill_in 'Tag list (comma sep)', with: attributes[:tag_list]
+    def create(deck, tags)
+      fill_in 'Name', with: deck.name
+      fill_in 'Description', with: deck.description
+      fill_in 'Tag list (comma sep)',
+              with: Pages::FlashCardDeck.formatted_tag_list(tags)
       click_button 'Create Deck'
       Pages::FlashCardDeck.new
     end
