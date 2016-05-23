@@ -37,6 +37,8 @@ FactoryGirl.define do
     association :deck, factory: :deck
   end
 
+  # See the models.rb file to understand the relationship between decks and tags. It 
+  # is a polymorphic many-to-many relationship.
   factory :tag do
     sequence(:name) { |n| "tag-#{n}" }
   end
