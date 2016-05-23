@@ -5,7 +5,7 @@ require 'spec_helper'
 #   I want to create a flash card deck
 #   So that I can add flash cards to it
 #   And be able to study flash cards
-feature 'User creates flash card deck' do
+feature 'user creates flash card deck' do
 
   before(:each) do
     Pages::SignIn.sign_in
@@ -22,7 +22,7 @@ feature 'User creates flash card deck' do
   scenario 'succeeds with valid data' do
     deck = FactoryGirl.build(:deck)
     tag = FactoryGirl.build(:tag)
-    
+
     Pages::NewFlashCardDeck.create(deck, [tag])
 
     expect(Pages::FlashCardDeck).to have_deck(deck, [tag])

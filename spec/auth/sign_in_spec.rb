@@ -4,7 +4,7 @@ require 'spec_helper'
 #   As a User
 #   I want to sign in
 #   So I can use the application
-feature 'User Signs In' do
+feature 'user signs in' do
 
   # Scenario: User can sign in with valid credentials
   #   Given I have valid credentials
