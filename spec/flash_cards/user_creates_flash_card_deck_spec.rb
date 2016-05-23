@@ -22,6 +22,7 @@ feature 'User creates flash card deck' do
   scenario 'succeeds with valid data' do
     deck = FactoryGirl.build(:deck)
     tag = FactoryGirl.build(:tag)
+    
     Pages::NewFlashCardDeck.create(deck, [tag])
 
     expect(Pages::FlashCardDeck).to have_deck(deck, [tag])
