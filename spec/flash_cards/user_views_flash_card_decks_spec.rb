@@ -1,9 +1,5 @@
 require 'spec_helper'
 
-# Feature: View flash card decks
-#   As a user
-#   I want to view the decks I have authored
-#   So I can view, edit, or delete them
 feature 'user views deck' do
   before(:all) do
     create_decks_for_user
@@ -13,12 +9,6 @@ feature 'user views deck' do
     Pages::FlashCardDecks.visit
   end
 
-  # Scenario: successfully views flash card decks
-  # Given that flash card decks exist in the system for me and other users
-  # And that I have successfully signed in
-  # When I navigate to the index page for decks
-  # Then I am able to see the decks I have authored
-  # And I am not able to see the decks of other users
   scenario 'successfully views own decks' do
     expect(Pages::FlashCardDecks).to have_deck(@decks[0].name)
     expect(Pages::FlashCardDecks).to have_deck(@decks[1].name)
