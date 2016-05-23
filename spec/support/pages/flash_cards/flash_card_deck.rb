@@ -1,5 +1,7 @@
 module Pages
-  #:nodoc:
+  # This class represents a Deck page, which in addition to information
+  # about a deck, also contains a listing of the associated flash cards
+  # and a link to add new flash cards.
   class FlashCardDeck
     URL = '/decks/'
 

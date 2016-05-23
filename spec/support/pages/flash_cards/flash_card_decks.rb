@@ -1,5 +1,6 @@
 module Pages
-  # This class represents the Flash Card Decks Index page
+  # This class represents the Flash Card Decks Index page,
+  # which lists all the Decks associated with the given user
   class FlashCardDecks
     URL = '/decks'
 
