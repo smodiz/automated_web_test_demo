@@ -25,7 +25,7 @@ describe 'create flash card via the API' do
   end
 
   context 'without required fields' do
-    it 'returns error for each missing required fields' do
+    it 'returns error for each missing required field' do
       invalid_flash_card = FactoryGirl.build(
         :flash_card, deck: deck, difficulty: '', front: '', back: '', sequence: '')
       expected_errors = [

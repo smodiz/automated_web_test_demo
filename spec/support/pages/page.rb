@@ -1,18 +1,13 @@
 module Pages
-  #:nodoc:
+  # Page has generic calls to the Capybara lib to interface with a web page
   class Page
     include Capybara::DSL
 
     attr_reader :url, :menu
 
-    def initialize(form_prefix: '', url:)
-      @url = url
+    def initialize(form_prefix: '')
       @prefix = form_prefix
       @menu = Components::Menu.new(self)
-    end
-
-    def visit_page
-      visit(url)
     end
 
     def has_alert?(message)
@@ -48,8 +43,6 @@ module Pages
     def sign_out
       menu.sign_out
     end
-
-    private
 
     attr_reader :prefix
 

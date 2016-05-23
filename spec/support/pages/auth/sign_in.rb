@@ -1,27 +1,28 @@
 module Pages
-  #:nodoc:
-  class SignIn < Page
-    def initialize
-      super(url: '/users/sign_in')
+  # This class represents the Sign In page
+  class SignIn
+
+    URL ='/users/sign_in'
+
+    def self.sign_in(username: ENV['QN_USER'], password: ENV['QN_PASSWORD'])
+      page = Page.new
+      page.sign_out if page.signed_in?
+
+      page.visit '/users/sign_in'
+      page.fill_in 'Email', with: username
+      page.fill_in 'Password', with: password
+      page.check 'Remember me'
+      page.click_button 'Sign in'
     end
 
-    def sign_in(username: ENV['QN_USER'], password: ENV['QN_PASSWORD'])
-      sign_out if signed_in?
-
-      visit_page
-      fill_in 'Email', with: username
-      fill_in 'Password', with: password
-      check 'Remember me'
-      click_button 'Sign in'
-      Pages::Dashboard.new
+    def self.has_success_message?
+      page = Page.new
+      page.has_alert?('Signed in successfully')
     end
 
-    def has_success_message?
-      has_alert?('Signed in successfully')
-    end
-
-    def has_error_message?
-      has_warning?('Invalid email or password')
+    def self.has_error_message?
+      page = Page.new
+      page.has_warning?('Invalid email or password')
     end
   end
 end

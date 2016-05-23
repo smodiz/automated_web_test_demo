@@ -1,10 +1,18 @@
 module Pages
   #:nodoc:
-  class Dashboard < Page
-    def initialize
-      super(url: '/')
+  class Dashboard
+    URL = '/'
+
+    def self.visit
+      page.visit
     end
-    # nothing needed from homepage yet, except the menu
-    # component, which is provided by the superclass
+
+    def self.sign_out
+      page.sign_out
+    end
+
+    def self.page
+      Page.new
+    end
   end
 end
