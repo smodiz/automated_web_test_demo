@@ -93,7 +93,7 @@ That's all. How easy is that? Then somewhere in your test data factory, you coul
 Deck.create(name: 'Design Patterns', description: 'From the Gang of Four book')
 ```
 
-You can see all of the ActiveRecord classes for this project in the [models file]((https://github.com/smodiz/automated_web_test_demo/tree/master/spec/support/data/models.rb). 
+You can see all of the ActiveRecord classes for this project in the [models file](https://github.com/smodiz/automated_web_test_demo/tree/master/spec/support/data/models.rb). 
 
 ____________________________
 
@@ -124,12 +124,12 @@ ____________________________
 
 **Database Cleaner**
 
-And now, for the final part .... how do we get rid of the data after each test? That's where the Database Cleaner gem comes into play. 
+We use the database cleaner gem to get rid of the data after each test. You can configure it to preserve certain tables, like the ones you use for ref data (like a table that has all the states, which is used to populate a state selection list for an address).
 
 
 ### Test Runner ###
 
-This uses RSpec as the testing framework. The main thing I like about RSpec is that it is a DSL with a clean and easy to read syntax. It looks more like English than code, which makes it a little more accessible to testers that don't have a lot of development experience. Before we look at a real example, let's look at the basic structure of a feature and scenario in RSpec. 
+This project uses RSpec as the testing framework. The main thing I like about RSpec is that it is a DSL with a clean and easy to read syntax. It looks more like English than code, which makes it a little more accessible to testers that don't have a lot of development experience. Before we look at a real example, let's look at the basic structure of a feature and scenario in RSpec. 
 
 By convention, we separate the test setup, test execution, and checking the results by a blank line. This makes it easier to immediately identify what's going on (setup, or execution, or checking). 
 
@@ -192,19 +192,6 @@ feature 'User creates flash card deck' do
 end
 ```
 
-Note: by convention, we separate the test setup, test execution, and checking the results by a blank line. This makes it easier to immediately identify what a line of code is supposed to be doing (setup, or execution, or checking). 
-
-```
-  scenario 'it does something' do
-    # do setup that is specific only to this scenario
-    # (other setup that applies to all scenarios goes in the before(:each) section)
-
-    # test the application
-
-    # check the results
-  end
-```
-
 In addition to the readability factor, I also like the fact that you can tag a test with one or more labels in RSpec. This allows you to tag a test as, say, 'smoke', or 'regression', or something else, and then run only the tests tagged a certain way. Even better, a single test can have multiple tags.
 
 I also like the output options that RSpec provides. You can run it with minimal output and get the old familiar green dot for each passing test, or you can run it with a format of 'documentation', and get a more informative output, like this:
@@ -262,7 +249,7 @@ visit       "http://www.example.com"
 click_link  "Login Here"
 ```
 
-Capybara handles instantiating the driver, and stopping it afterwards, and it directs your commands to the driver without you having to prefix your commands with 'driver. It's just easier, cleaner, nicer. And if there's ever a case where the driver does something that Capybara doesn't support, Capybara will give you a handle to the driver and you can code away directly against whatever web driver you're using.
+Capybara handles instantiating the driver, and quitting after the test is done, and it directs your commands to the driver without you having to prefix your commands with 'driver'. It's just easier, cleaner, nicer. And if there's ever a case where the driver does something that Capybara doesn't support, Capybara will give you a handle to the driver and you can code away directly against whatever web driver you're using.
 
 ____________________________
 
@@ -295,12 +282,12 @@ create flash card via the API
   without required fields
     returns error for each missing required field
 
-User Signs In
+user Signs In
   signs you in with valid credentials
   does not sign you in with invalid username
   does not sign you in with invalid password
 
-User creates flash card deck
+user creates flash card deck
   succeeds with valid data
   fails without required fields
   succeeds using an existing tag
